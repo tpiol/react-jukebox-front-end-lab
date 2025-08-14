@@ -13,7 +13,10 @@ const NowPlaying = (props) => {
 
             <div>
                 <button onClick={() => props.handleFormView(props.selected)}>
-                    Edit Track
+                    edit track
+                </button>
+                 <button onClick={() => props.handleDeleteTrack(props.selected._id)}>
+                    delete track
                 </button>
         </div>
         </div>

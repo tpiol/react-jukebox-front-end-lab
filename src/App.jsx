@@ -30,7 +30,7 @@ const App = () => {
   };
 
   const handleFormView = (track) => {
-   if (!track._id) setSelected(null);
+    if (!track._id) setSelected(null);
     setIsFormOpen(!isFormOpen);
   }
 
@@ -53,7 +53,7 @@ const App = () => {
       if (updatedTrack.err) {
         throw new Error(updatedTrack.err);
       }
-      const updateTrackList = tracks.map((track) => 
+      const updateTrackList = tracks.map((track) =>
         track._id !== updatedTrack._id ? track : updatedTrack
       )
       setTracks(updateTrackList);
@@ -64,25 +64,42 @@ const App = () => {
     }
   }
 
+  const handleDeleteTrack = async (trackId) => {
+    try {
+      const deletedTrack = await trackService.deleteTrack(trackId)
+      if (deletedTrack.err) {
+        throw new Error(deletedTrack.err);
+      }
+      const updateDeleteTrack = tracks.filter((track) =>
+        track._id !== deletedTrack._id
+      )
+      setTracks(updateDeleteTrack);
+      setSelected(null);
+      setIsFormOpen(false);
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
 
-return (
-  <>
-    <TrackList
-      tracks={tracks}
-      handleSelect={handleSelect}
-      handleFormView={handleFormView}
-      isFormOpen={isFormOpen}
 
-    />
-    {isFormOpen ? (
-      <TrackForm selected={selected} handleAddTrack={handleAddTrack} handleUpdateTrack={handleUpdateTrack}/>
-    ) : (
-      <NowPlaying selected={selected} handleFormView={handleFormView} />
-    )}
+  return (
+    <>
+      <TrackList
+        tracks={tracks}
+        handleSelect={handleSelect}
+        handleFormView={handleFormView}
+        isFormOpen={isFormOpen}
 
-  </>
-)
+      />
+      {isFormOpen ? (
+        <TrackForm selected={selected} handleAddTrack={handleAddTrack} handleUpdateTrack={handleUpdateTrack} />
+      ) : (
+        <NowPlaying selected={selected} handleFormView={handleFormView} handleDeleteTrack={handleDeleteTrack}/>
+      )}
+
+    </>
+  )
 };
 
 export default App;
