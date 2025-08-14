@@ -7,12 +7,17 @@ const TrackForm = (props) => {
     });
 
     const handleChange = (evt) => {
-        setFormData({ ...formData, [evt.target.title]: evt.target.value });
+        setFormData({ ...formData, [evt.target.name]: evt.target.value });
+    };
+
+    const handleSubmit = (evt) => {
+        evt.preventDefault();
+        props.handleAddTrack(formData)
     };
 
     return (
         <div>
-            <form>
+            <form onSubmit={handleSubmit}>
                 <label htmlFor="title"> Title</label>
                 <input
                     id="title"

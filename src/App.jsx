@@ -33,6 +33,20 @@ const App = () => {
     setIsFormOpen(!isFormOpen);
   }
 
+  const handleAddTrack = async (formData) => {
+    try {
+      const newTrack = await trackService.create(formData);
+      if (newTrack.err) {
+        throw new Error(newTrack.err);
+      }
+      setTracks([newTrack, ...tracks]);
+      setIsFormOpen(false);
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+
   return (
     <>
       <TrackList
@@ -43,7 +57,7 @@ const App = () => {
 
       />
       {isFormOpen ? (
-        <TrackForm />
+        <TrackForm handleAddTrack={handleAddTrack} />
       ) : (
         <NowPlaying selected={selected} />
       )}
